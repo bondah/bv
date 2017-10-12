@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>BunkerValleyMap</title>
+  <meta charset="utf-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
+  <style type="text/css">
+
+    #map{
+       width: 800px;
+       height: 600px
+    }
+  </style>
+  <script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
+  <script>
+  function init() {
+      var map = L.map('map', {
+        minZoom: 11,
+        maxZoom: 15
+      });
+      map.setView([33.827, -113.972], 11);
+
+      var mytile =L.tileLayer('BunkerValleyMap/{z}/{x}/{y}.png', {
+        maxZoom: 15,
+        tms: false,
+        attribution: 'OpenStreetMap'
+      }).addTo(map);
+
+      var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+      });
+
+      var bv = L.polygon([
+          [33.7843, -114.0493],
+          [33.7849, -114.0456],
+          [33.7881, -114.0363],
+          [33.7858, -114.0348],
+          [33.7795, -114.0402],
+          [33.7797, -114.0467],
+          [33.7823, -114.0499],
+      ]).addTo(map);
+
+      var basemaps = {
+        "Aerial": Esri_WorldImagery,
+        "Map": mytile
+      }
+
+      var overlays = {
+        "Bunker Valley": bv
+      }
+
+      bv.bindPopup("<b>Bunker Valley</b>").openPopup();
+
+      L.control.layers(basemaps, overlays).addTo(map);
+  }
+  </script>
+</head>
+<body onload="init();">
+  <div id="map"></div>
+</body>
+</html>
